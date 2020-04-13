@@ -89,11 +89,34 @@ public class JsePlatform {
 	 * @return Table of globals initialized with the standard JSE libraries
 	 * @see #debugGlobals()
 	 * @see org.luaj.vm2.lib.jse.JsePlatform
-	 * @see org.luaj.vm2.lib.jme.JmePlatform
 	 */
 	public static Globals standardGlobals() {
 		Globals globals = new Globals();
 		globals.load(new JseBaseLib());
+		globals.load(new PackageLib());
+		globals.load(new Bit32Lib());
+		globals.load(new TableLib());
+		globals.load(new JseStringLib());
+		globals.load(new CoroutineLib());
+		globals.load(new JseMathLib());
+		globals.load(new JseIoLib());
+		globals.load(new JseOsLib());
+		globals.load(new LuajavaLib());
+		LoadState.install(globals);
+		LuaC.install(globals);
+		return globals;
+	}
+
+	/**
+	 * Create a standard set of globals for JSE including all the libraries.
+	 *
+	 * @return Table of globals initialized with the standard JSE libraries
+	 * @see #debugGlobals()
+	 * @see org.luaj.vm2.lib.jse.JsePlatform
+	 */
+	public static Globals standardGlobals(String basePath) {
+		Globals globals = new Globals();
+		globals.load(new JseBaseLib(basePath));
 		globals.load(new PackageLib());
 		globals.load(new Bit32Lib());
 		globals.load(new TableLib());
@@ -113,7 +136,6 @@ public class JsePlatform {
 	 * @return Table of globals initialized with the standard JSE and debug libraries
 	 * @see #standardGlobals()
 	 * @see org.luaj.vm2.lib.jse.JsePlatform
-	 * @see org.luaj.vm2.lib.jme.JmePlatform
 	 * @see DebugLib
 	 */
 	public static Globals debugGlobals() {
