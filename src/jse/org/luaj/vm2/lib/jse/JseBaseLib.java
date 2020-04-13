@@ -80,6 +80,9 @@ public class JseBaseLib extends org.luaj.vm2.lib.BaseLib {
     }
 
     public JseBaseLib(String basePath) {
+        if (basePath == null) {
+            throw new NullPointerException("basePath can not be null");
+        }
         this.basePath = basePath;
     }
 
@@ -113,10 +116,13 @@ public class JseBaseLib extends org.luaj.vm2.lib.BaseLib {
      * @see org.luaj.vm2.lib.BaseLib
      * @see org.luaj.vm2.lib.ResourceFinder
      */
+    @Override
     public InputStream findResource(String filename) {
-        File f = new File(filename);
+        File f = new File(basePath + filename);
         if (!f.exists()) {
-            return super.findResource(basePath + filename);
+            if (basePath.isEmpty()) {
+                return super.findResource(filename);
+            }
         }
         try {
             return new BufferedInputStream(new FileInputStream(f));
